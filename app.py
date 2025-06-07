@@ -66,7 +66,7 @@ def predict_sentiment_with_score(text, model, vectorizer, stop_words):
     return sentiment_label, polarity
 
 def main():
-    st.title("Sentiment Analysis: Reddit & YouTube Comments")
+    st.title("Sentiment Analysis:")
 
     stop_words = load_stopwords()
     model, vectorizer = load_model_and_vectorizer()
