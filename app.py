@@ -25,8 +25,8 @@ def load_model_and_vectorizer():
 @st.cache_resource
 def initialize_reddit():
     reddit = praw.Reddit(
-        client_id="QECiIk7O5CMaWvXTaphrzw",
-        client_secret="u5Pelzwf2qSmrXwraJTkWBICS71rng",
+        client_id="",
+        client_secret="",
         user_agent="reddit-sentiment-app"
     )
     return reddit
@@ -35,7 +35,7 @@ def initialize_reddit():
 @st.cache_resource
 def initialize_youtube():
     from googleapiclient.discovery import build
-    api_key = "AIzaSyA0uWwCrseupnda4I2dk4Q6HxUl9BZBuSE"
+    api_key = ""
     youtube = build("youtube", "v3", developerKey=api_key)
     return youtube
 
