@@ -108,3 +108,30 @@ def main():
         video_id = st.text_input("Enter YouTube Video ID (e.g. dQw4w9WgXcQ)")
         if st.button("Fetch Comments"):
             try:
+                comments = []
+                request = youtube.commentThreads().list(
+                    part="snippet",
+                    videoId=video_id,
+                    maxResults=10,
+                    textFormat="plainText"
+                )
+                response = request.execute()
+
+                for item in response['items']:
+                    comment = item['snippet']['topLevelComment']['snippet']['textDisplay']
+                    comments.append(comment)
+
+                if not comments:
+                    st.write("No comments found.")
+                else:
+                    for comment_text in comments:
+                        sentiment, polarity = predict_sentiment_with_score(comment_text, model, vectorizer, stop_words)
+                        st.write(f"**Sentiment (Model):** {sentiment}")
+                        st.write(f"**Polarity (TextBlob):** {polarity:.2f}")
+                        st.write(comment_text)
+                        st.write("---")
+            except Exception as e:
+                st.error(f"Error fetching comments: {e}")
+
+if __name__ == "__main__":
+    main()
