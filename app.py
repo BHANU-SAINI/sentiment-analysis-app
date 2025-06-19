@@ -25,8 +25,8 @@ def load_model_and_vectorizer():
 @st.cache_resource
 def initialize_reddit():
     reddit = praw.Reddit(
-        client_id="",
-        client_secret="",
+        client_id="QECiIk7O5CMaWvXTaphrzw",
+        client_secret="u5Pelzwf2qSmrXwraJTkWBICS71rng",
         user_agent="reddit-sentiment-app"
     )
     return reddit
@@ -35,9 +35,10 @@ def initialize_reddit():
 @st.cache_resource
 def initialize_youtube():
     from googleapiclient.discovery import build
-    api_key = ""
+    api_key = "AIzaSyA0uWwCrseupnda4I2dk4Q6HxUl9BZBuSE"
     youtube = build("youtube", "v3", developerKey=api_key)
     return youtube
+
 
 # Preprocess text and predict sentiment polarity using TextBlob fallback
 def predict_sentiment_with_score(text, model, vectorizer, stop_words):
