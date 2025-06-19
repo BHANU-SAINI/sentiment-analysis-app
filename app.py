@@ -39,7 +39,7 @@ def initialize_youtube():
     youtube = build("youtube", "v3", developerKey=api_key)
     return youtube
 
-# Preprocess text and predict sentiment using model (TextBlob polarity for info only)
+# Preprocess text and predict sentiment with combined model + TextBlob logic
 def predict_sentiment_with_score(text, model, vectorizer, stop_words):
     # Preprocess text
     text_proc = re.sub('[^a-zA-Z]', ' ', text)
@@ -58,9 +58,15 @@ def predict_sentiment_with_score(text, model, vectorizer, stop_words):
     else:
         sentiment_label = "Negative"
 
-    # Get TextBlob polarity for reference
+    # Get TextBlob polarity
     from textblob import TextBlob
     polarity = TextBlob(text).sentiment.polarity
+
+    # Combine logic: override model if polarity is strongly positive/negative
+    if polarity > 0.5:
+        sentiment_label = "Positive"
+    elif polarity < -0.5:
+        sentiment_label = "Negative"
 
     return sentiment_label, polarity
 
@@ -78,7 +84,7 @@ def main():
         text_input = st.text_area("Enter text to analyze sentiment")
         if st.button("Analyze"):
             sentiment, polarity = predict_sentiment_with_score(text_input, model, vectorizer, stop_words)
-            st.write(f"**Sentiment (Model):** {sentiment}")
+            st.write(f"**Sentiment:** {sentiment}")
             st.write(f"**Polarity (TextBlob):** {polarity:.2f}")
             st.write("---")
             st.write(text_input)
@@ -97,7 +103,7 @@ def main():
                 else:
                     for post_text in posts:
                         sentiment, polarity = predict_sentiment_with_score(post_text, model, vectorizer, stop_words)
-                        st.write(f"**Sentiment (Model):** {sentiment}")
+                        st.write(f"**Sentiment:** {sentiment}")
                         st.write(f"**Polarity (TextBlob):** {polarity:.2f}")
                         st.write(post_text)
                         st.write("---")
@@ -126,7 +132,7 @@ def main():
                 else:
                     for comment_text in comments:
                         sentiment, polarity = predict_sentiment_with_score(comment_text, model, vectorizer, stop_words)
-                        st.write(f"**Sentiment (Model):** {sentiment}")
+                        st.write(f"**Sentiment:** {sentiment}")
                         st.write(f"**Polarity (TextBlob):** {polarity:.2f}")
                         st.write(comment_text)
                         st.write("---")
